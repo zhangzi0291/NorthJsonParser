@@ -25,9 +25,7 @@ public class JSONAnalyze {
     //词法分析
     public List<Object> analyze(Object jsonObject) {
         String json = jsonObject.toString().strip();
-//        if (!(json.startsWith("{") && json.endsWith("}"))) {
-//            throw new NorthJSONException("JSON不是以{}开头结尾");
-//        }
+
         json = json.substring(1,json.length()-1);
         char[] chars = json.toCharArray();
         List<Object> resultList = new CopyOnWriteArrayList<>();
@@ -127,10 +125,27 @@ public class JSONAnalyze {
                 List<Object> analyzeList = analyze(value);
                 value = getJSONObject(analyzeList);
             }
+            if(isJSONArray(value)){
+                List<Object> analyzeList = analyze(value);
+                value = getJSONArray(analyzeList);
+            }
             jsonObject.put(key, value);
             i++;
         }
         return jsonObject;
+    }
+
+    public JSONArray getJSONArray(List<Object> list) {
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < list.size(); i++) {
+            Object value = list.get(i++);
+            if(isJSONObject(value)){
+                List<Object> analyzeList = analyze(value);
+                value = getJSONObject(analyzeList);
+            }
+            jsonArray.add(value);
+        }
+        return jsonArray;
     }
 
     boolean isValue(List<Object> result) {
@@ -139,27 +154,12 @@ public class JSONAnalyze {
 
 
     public static void main(String[] args) {
-//        String testStr = "{\n" +
-//                "123: 63,\n" +
-//                "        country: \"美 国\",\n" +
-//                "        \"area\": \"\",\n" +
-//                "        \"region\": \"华盛顿\",\n" +
-//                "        \"city\": \"西雅图\",\n" +
-//                "        \"county\": \"XX\",\n" +
-//                "        \"isp\": \"电讯盈科\",\n" +
-//                "        \"country_id\": \"US\",\n" +
-//                "        \"area_id\": \"\",\n" +
-//                "        \"region_id\": \"US_147\",\n" +
-//                "        \"city_id\": \"US_1107\",\n" +
-//                "        \"county_id\": \"xx\",\n" +
-//                "        \"isp_id\": {'a':'b'}\n" +
-//                "    }";
-        String testStr ="{\"oppose_right\": [1,2,3], \"algorithm_right\": {\"sarcasm\": \"none\"}, \"is_answer_oppose_reason_visiable\": '123.123', \"is_answer_rewardable\": false, \"is_creator\": false,}\n";
-//        String testStr =" [ {  \"id\" : \"123\", \"courseID\" : \"huangt-test\", \"title\" : \"提交作业\"}  ,  {  \"content\" : null, \"beginTime\" : 1398873600000,  \"endTime\" :1398873600000} ]";
+//        String testStr ="{\"oppose_right\": [1,2,3], \"algorithm_right\": {\"sarcasm\": \"none\"}, \"is_answer_oppose_reason_visiable\": '123.123', \"is_answer_rewardable\": false, \"is_creator\": false,}\n";
+        String testStr =" [ 1,\"abc\", {  \"id\" : \"123\", \"courseID\" : \"huangt-test\", \"title\" : \"提交作业\"}  ,  {  \"content\" : null, \"beginTime\" : 1398873600000,  \"endTime\" :1398873600000 } ]";
         JSONAnalyze analyze = new JSONAnalyze();
         List<Object> analyzeList = analyze.analyze(testStr);
         System.out.println(analyzeList);
-        JSONObject json = analyze.getJSONObject(analyzeList);
+        JSONArray json = analyze.getJSONArray(analyzeList);
         System.out.println(json.toJSONString());
         System.out.println();
     }

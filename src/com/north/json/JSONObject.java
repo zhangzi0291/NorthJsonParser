@@ -15,7 +15,7 @@ public class JSONObject extends ConcurrentHashMap<String,Object> implements JSON
             if(JSONAnalyze.isJSONObject(entry.getValue())) {
                 sb.append( ((JSONObject)entry.getValue()).toJSONString() );
             }else if (JSONAnalyze.isJSONArray(entry.getValue())){
-                sb.append(entry.getValue());
+                sb.append(((JSONArray)entry.getValue()).toJSONString() );
             }else{
                 if((entry.getValue() instanceof Long) || (entry.getValue() instanceof Double ) || (entry.getValue() instanceof Boolean )){
                     sb.append(entry.getValue());
