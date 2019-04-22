@@ -23,7 +23,9 @@ public class JSONArray extends CopyOnWriteArrayList implements JSON, Serializabl
             }
             sb.append(" , ");
         }
-        sb.delete(sb.length()-2,sb.length());
+        if(sb.length()>3){
+            sb.delete(sb.lastIndexOf(","),sb.length());
+        }
         sb.append("]");
         return sb.toString();
     }

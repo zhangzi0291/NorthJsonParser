@@ -26,7 +26,9 @@ public class JSONObject extends ConcurrentHashMap<String,Object> implements JSON
             }
             sb.append(" , ");
         }
-        sb.delete(sb.length()-2,sb.length());
+        if(sb.length()>3){
+            sb.delete(sb.lastIndexOf(","),sb.length());
+        }
         sb.append("}");
         return sb.toString();
     }
