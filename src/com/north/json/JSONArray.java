@@ -10,8 +10,10 @@ public class JSONArray extends CopyOnWriteArrayList implements JSON, Serializabl
         sb.append("[");
         for (Object entry: this ) {
             if(JSONAnalyze.isJSONObject(entry)) {
-                sb.append( ((JSONObject)entry).toJSONString() );
+//            if(entry instanceof JSONObject) {
+                sb.append(((JSONObject) entry).toJSONString());
             }else if (JSONAnalyze.isJSONArray(entry)){
+//            }else if(entry instanceof JSONArray) {
                 sb.append(((JSONArray)entry).toJSONString() );
             }else{
                 if((entry instanceof Long) || (entry instanceof Double ) || (entry instanceof Boolean )){

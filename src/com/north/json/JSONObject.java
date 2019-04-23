@@ -10,6 +10,7 @@ public class JSONObject extends ConcurrentHashMap<String,Object> implements JSON
     public String toJSONString() {
         StringBuffer sb = new StringBuffer();
         sb.append("{");
+        boolean flag = false;
         for (Map.Entry<String,Object> entry: this.entrySet() ) {
             setKey(sb,entry.getKey()).append(":");
             if(JSONAnalyze.isJSONObject(entry.getValue())) {
@@ -25,8 +26,9 @@ public class JSONObject extends ConcurrentHashMap<String,Object> implements JSON
 
             }
             sb.append(" , ");
+            flag = true;
         }
-        if(sb.length()>3){
+        if(sb.length()>3&&flag){
             sb.delete(sb.lastIndexOf(","),sb.length());
         }
         sb.append("}");
